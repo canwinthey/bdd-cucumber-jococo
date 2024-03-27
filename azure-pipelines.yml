@@ -18,14 +18,15 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    goals: 'clean verify'
+    #goals: 'clean verify'
     #publishJUnitResults: true
     #testResultsFiles: '**/*-reports/TEST-*.xml'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
     #codeCoverageSourceDirectories: '**/site/junit/index.html'
-#- script: mvn clean install verify # Command to run tests    
+
+- script: mvn clean verify # Command to run tests    
 
 - task: PublishTestResults@2
   displayName: 'Publish JunitTest Results'
@@ -60,8 +61,27 @@ steps:
     failIfCoverageEmpty: false
 
 - task: CopyFiles@2
+  displayName: 'CheckStyle Results'
   inputs:
     SourceFolder: 'target/'
     Contents: '**/checkstyle-*.xml'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/CheckstyleReports'
-    
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish CheckStyle Results'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/CheckstyleReports'
+    artifactName: 'CheckstyleReports'   
+
+- task: CopyFiles@2
+  displayName: 'FindBugs Results'
+  inputs:
+    SourceFolder: 'target/'
+    Contents: '**/findbugsXml.xml'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/FindBugsReports'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish FindBugs Results'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/FindBugsReports'
+    artifactName: 'FindBugsReports'

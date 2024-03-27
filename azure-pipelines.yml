@@ -24,4 +24,12 @@ steps:
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
     #codeCoverageSourceDirectories: 
-- script: mvn clean install  # Command to run tests    
+- script: mvn clean install verify # Command to run tests    
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/surefire-reports/TEST-*.xml,**/target/cucumber-reports/cucumber.xml'
+    testRunTitle: 'JUnit and Cucumber Tests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    failTaskOnFailedTests: true

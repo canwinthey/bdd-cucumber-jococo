@@ -17,13 +17,13 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
+    #publishJUnitResults: true
     #testResultsFiles: '**/*-reports/TEST-*.xml'
     goals: 'clean install verify'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
-    #codeCoverageSourceDirectories: 
+    codeCoverageSourceDirectories: '**/site/junit/index.html'
 - script: mvn clean install verify # Command to run tests    
 
 - task: PublishTestResults@2
@@ -43,3 +43,17 @@ steps:
     testRunTitle: 'BDD Cucumber Tests'
     searchFolder: '$(System.DefaultWorkingDirectory)'
     failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@1
+  displayName: JUnit Code Coverage
+  inputs:
+    codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/junit/jacoco.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/junit'
+
+- task: PublishCodeCoverageResults@1
+  displayName: Cucumber Code Coverage
+  inputs:
+    codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/cucumber'

@@ -18,10 +18,28 @@ steps:
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
-    testResultsFiles: '**/*-reports/TEST-*.xml'
+    #testResultsFiles: '**/*-reports/TEST-*.xml'
     goals: 'clean install verify'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
     #codeCoverageSourceDirectories: 
 - script: mvn clean install verify # Command to run tests    
+
+- task: PublishTestResults@2
+  displayName: 'Publish JunitTest Results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    testRunTitle: 'TDD JUnit Tests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    failTaskOnFailedTests: true
+    
+- task: PublishTestResults@2
+  displayName: 'Publish Cucumbr Test Results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/failsafe-reports/TEST-*.xml'
+    testRunTitle: 'BDD Cucumber Tests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    failTaskOnFailedTests: true

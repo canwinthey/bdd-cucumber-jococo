@@ -1,0 +1,60 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  displayName: 'Maven Build Job'
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    goals: 'clean verify'
+    #publishJUnitResults: true
+    #testResultsFiles: '**/*-reports/TEST-*.xml'
+    #sonarQubeRunAnalysis: true
+    #checkStyleRunAnalysis: true
+    #pmdRunAnalysis: true
+    #codeCoverageSourceDirectories: '**/site/junit/index.html'
+#- script: mvn clean install verify # Command to run tests    
+
+- task: PublishTestResults@2
+  displayName: 'Publish JunitTest Results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    testRunTitle: 'TDD JUnit Tests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    failTaskOnFailedTests: false
+    
+- task: PublishTestResults@2
+  displayName: 'Publish Cucumbr Test Results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/failsafe-reports/TEST-*.xml'
+    testRunTitle: 'BDD Cucumber Tests'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    failTaskOnFailedTests: false
+
+- task: PublishCodeCoverageResults@2
+  displayName: 'JUnit Code Coverage'
+  inputs:
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/junit/jacoco.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)/target/site/junit'
+    failIfCoverageEmpty: false
+        
+- task: PublishCodeCoverageResults@2
+  displayName: 'Cucumber Code Coverage'
+  inputs:
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
+    failIfCoverageEmpty: false

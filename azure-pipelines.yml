@@ -18,14 +18,14 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    goals: 'clean install verify'
+    goals: 'clean verify'
     #publishJUnitResults: true
     #testResultsFiles: '**/*-reports/TEST-*.xml'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
     #codeCoverageSourceDirectories: '**/site/junit/index.html'
-- script: mvn clean install verify # Command to run tests    
+#- script: mvn clean install verify # Command to run tests    
 
 - task: PublishTestResults@2
   displayName: 'Publish JunitTest Results'

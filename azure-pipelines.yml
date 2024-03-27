@@ -18,7 +18,7 @@ steps:
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
-    testResultsFiles: '**/failsafe-reports/TEST-*.xml'
+    testResultsFiles: '**/failsafe-reports/TEST-*.xml,**/surefire-reports/TEST-*.xml'
     goals: 'clean install verify'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true

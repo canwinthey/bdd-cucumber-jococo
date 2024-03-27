@@ -19,4 +19,9 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    goals: 'clean verify'
+    sonarQubeRunAnalysis: true
+    checkStyleRunAnalysis: true
+    pmdRunAnalysis: true
+    #codeCoverageSourceDirectories: 
+- script: mvn clean verify  # Command to run tests    

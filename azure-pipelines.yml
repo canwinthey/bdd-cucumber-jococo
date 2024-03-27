@@ -58,3 +58,10 @@ steps:
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
     pathToSources: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
     failIfCoverageEmpty: false
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'target/'
+    Contents: '**/checkstyle-*.xml'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/CheckstyleReports'
+    

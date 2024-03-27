@@ -44,16 +44,20 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
     failTaskOnFailedTests: true
 
-- task: PublishCodeCoverageResults@1
+- task: PublishCodeCoverageResults@2
   displayName: JUnit Code Coverage
   inputs:
-    codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
+    #codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/junit/jacoco.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/junit'
+    #reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/junit'
+    failIfCoverageEmpty: false
+    pathToSources: '$(System.DefaultWorkingDirectory)/target/site/junit'
 
-- task: PublishCodeCoverageResults@1
+- task: PublishCodeCoverageResults@2
   displayName: Cucumber Code Coverage
   inputs:
-    codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
+    #codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
-    reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
+    #reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
+    failIfCoverageEmpty: false
+    pathToSources: '$(System.DefaultWorkingDirectory)/target/site/cucumber'

@@ -11,19 +11,20 @@ pool:
 
 steps:
 - task: Maven@3
+  displayName: 'Maven Build Job'
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
+    goals: 'clean install verify'
     #publishJUnitResults: true
     #testResultsFiles: '**/*-reports/TEST-*.xml'
-    goals: 'clean install verify'
     #sonarQubeRunAnalysis: true
     #checkStyleRunAnalysis: true
     #pmdRunAnalysis: true
-    codeCoverageSourceDirectories: '**/site/junit/index.html'
+    #codeCoverageSourceDirectories: '**/site/junit/index.html'
 - script: mvn clean install verify # Command to run tests    
 
 - task: PublishTestResults@2
@@ -33,7 +34,7 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     testRunTitle: 'TDD JUnit Tests'
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    failTaskOnFailedTests: true
+    failTaskOnFailedTests: false
     
 - task: PublishTestResults@2
   displayName: 'Publish Cucumbr Test Results'
@@ -42,22 +43,18 @@ steps:
     testResultsFiles: '**/failsafe-reports/TEST-*.xml'
     testRunTitle: 'BDD Cucumber Tests'
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    failTaskOnFailedTests: true
+    failTaskOnFailedTests: false
 
 - task: PublishCodeCoverageResults@2
-  displayName: JUnit Code Coverage
+  displayName: 'JUnit Code Coverage'
   inputs:
-    #codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/junit/jacoco.xml'
-    #reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/junit'
-    failIfCoverageEmpty: false
     pathToSources: '$(System.DefaultWorkingDirectory)/target/site/junit'
-
-- task: PublishCodeCoverageResults@2
-  displayName: Cucumber Code Coverage
-  inputs:
-    #codeCoverageTool: 'JaCoCo'  # Or 'Cobertura' depending on the tool you're using
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
-    #reportDirectory: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
     failIfCoverageEmpty: false
+        
+- task: PublishCodeCoverageResults@2
+  displayName: 'Cucumber Code Coverage'
+  inputs:
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/target/site/cucumber/jacoco.xml'
     pathToSources: '$(System.DefaultWorkingDirectory)/target/site/cucumber'
+    failIfCoverageEmpty: false

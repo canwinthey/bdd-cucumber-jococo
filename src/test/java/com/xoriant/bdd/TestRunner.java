@@ -5,7 +5,8 @@ import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="discount.feature")
+@CucumberOptions(plugin = {"pretty"}, tags = {"@@withDataTable"},
+        features= {"src/test/resources/features"})
 public class TestRunner {
 
 }

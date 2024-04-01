@@ -18,7 +18,7 @@ public class InvoiceController {
     private DiscountService discountService;
 
     @GetMapping("/discount")
-    public ResponseEntity<String> getDiscountForOrder(@RequestBody Invoice invoice){
+    public ResponseEntity<String> getDiscountForInvoice(@RequestBody Invoice invoice){
         return new ResponseEntity<>(discountService.getDiscountForInvoice(invoice), HttpStatus.OK);
     }
 }
